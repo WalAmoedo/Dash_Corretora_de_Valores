@@ -2,27 +2,6 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-st.markdown("""
-    <style>
-    /* Fundo das caixinhas do multiselect */
-    div[data-baseweb="tag-list"] > div {
-        background-color: #A020F0 !important;  /* lilás/roxo */
-        color: white !important;               /* texto branco */
-        border-radius: 6px !important;
-    }
-
-    /* Botão de fechar da tag */
-    div[data-baseweb="tag-list"] svg {
-        fill: white !important;               /* X branco */
-    }
-
-    /* Placeholder das caixinhas */
-    div[data-baseweb="select"] input {
-        color: white !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
 # --- Configuração da Página ---
 st.set_page_config(
     page_title="Dashboard - Corretora de Valores",
@@ -144,3 +123,4 @@ st.subheader("📑 Dados Detalhados")
 st.dataframe(df_filtrado)
 
 st.set_page_config(page_title="Dashboard - Corretora de Valores", page_icon="💹", layout="wide")
+
