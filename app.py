@@ -12,6 +12,27 @@ st.set_page_config(
 # --- Carregamento dos dados ---
 df = pd.read_csv("df_limpo.csv", sep=",")
 
+st.markdown("""
+    <style>
+    /* Fundo das caixinhas do multiselect */
+    div[data-baseweb="tag-list"] > div {
+        background-color: #A020F0 !important;  /* lilás/roxo */
+        color: white !important;               /* texto branco */
+        border-radius: 6px !important;
+    }
+
+    /* Botão de fechar da tag */
+    div[data-baseweb="tag-list"] svg {
+        fill: white !important;               /* X branco */
+    }
+
+    /* Placeholder das caixinhas */
+    div[data-baseweb="select"] input {
+        color: white !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # --- Barra Lateral (Filtros) ---
 st.sidebar.header("🔍 Filtros")
 
@@ -40,7 +61,6 @@ st.markdown("Explore os dados dos clientes da corretora. Use os filtros à esque
 
 # --- Métricas Principais (KPIs) ---
 st.subheader("📌 Métricas Gerais")
-
 if not df_filtrado.empty:
     patrimonio_medio = df_filtrado['Patrimonio_Total'].mean()
     patrimonio_max = df_filtrado['Patrimonio_Total'].max()
@@ -59,40 +79,38 @@ st.markdown("---")
 
 # --- Análises Visuais ---
 st.subheader("📈 Gráficos de Análise")
-
 col_graf1, col_graf2 = st.columns(2)
 
-# Gráfico 1 - Distribuição por Região
-with col_graf1:
-    if not df_filtrado.empty:
-        grafico_regiao = px.pie(
-            df_filtrado,
-            names="Região",
-            title="Distribuição de Clientes por Região",
-            hole=0.5
-        )
-        grafico_regiao.update_traces(textinfo="percent+label")
-        st.plotly_chart(grafico_regiao, use_container_width=True)
-    else:
-        st.warning("Nenhum dado para exibir por região.")
+# --- Gráfico 1: Distribuição de Clientes por Região (Barras) ---
+# Contamos os clientes por região e transformamos em DataFrame
+df_regiao = df_filtrado['Região'].value_counts().reset_index()
+df_regiao.columns = ['Região', 'Quantidade']
 
-# Gráfico 2 - Perfil x Patrimônio
-with col_graf2:
-    if not df_filtrado.empty:
-        grafico_perfil = px.box(
-            df_filtrado,
-            x="Perfil_Investidor",
-            y="Patrimonio_Total",
-            title="Distribuição de Patrimônio por Perfil de Investidor",
-            labels={"Patrimonio_Total": "Patrimônio (R$)", "Perfil_Investidor": "Perfil"}
-        )
-        st.plotly_chart(grafico_perfil, use_container_width=True)
-    else:
-        st.warning("Nenhum dado para exibir no gráfico de perfil.")
+fig_regiao = px.bar(
+    df_regiao,
+    x='Região',
+    y='Quantidade',
+    color='Região',        # cor por região
+    title="Distribuição de Clientes por Região",
+    color_discrete_sequence=['#A020F0']  # lilás
+)
+col_graf1.plotly_chart(fig_regiao, use_container_width=True)
 
+# --- Gráfico 2: Distribuição de Patrimônio por Perfil (Rosca) ---
+fig_patrimonio = px.pie(
+    df_filtrado,
+    names='Perfil_Investidor',
+    values='Patrimonio_Total',
+    title="Distribuição de Patrimônio por Perfil",
+    hole=0.4,  # transforma em rosca
+    color_discrete_sequence=['#A020F0']  # lilás
+)
+col_graf2.plotly_chart(fig_patrimonio, use_container_width=True)
+
+# --- Gráficos Inferiores ---
 col_graf3, col_graf4 = st.columns(2)
 
-# Gráfico 3 - Valor pago à corretora
+# Gráfico 3 - Valor pago à corretora (histograma)
 with col_graf3:
     if not df_filtrado.empty:
         grafico_taxas = px.histogram(
@@ -100,13 +118,14 @@ with col_graf3:
             x="Valor_Pago_Corretora",
             nbins=30,
             title="Distribuição do Valor Pago em Taxas",
-            labels={"Valor_Pago_Corretora": "Taxas Pagas (R$)"}
+            labels={"Valor_Pago_Corretora": "Taxas Pagas (R$)"},
+            color_discrete_sequence=['#A020F0']  # lilás
         )
         st.plotly_chart(grafico_taxas, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir no gráfico de taxas.")
 
-# Gráfico 4 - Patrimônio por Estado
+# Gráfico 4 - Patrimônio Médio por Estado
 with col_graf4:
     if not df_filtrado.empty:
         grafico_estado = px.bar(
@@ -114,15 +133,13 @@ with col_graf4:
             x="Estado",
             y="Patrimonio_Total",
             title="Patrimônio Médio por Estado",
-            labels={"Patrimonio_Total": "Patrimônio Médio (R$)", "Estado": "UF"}
+            color_discrete_sequence=['#A020F0']  # lilás
         )
         st.plotly_chart(grafico_estado, use_container_width=True)
     else:
-        st.warning("Nenhum dado para exibir por estado.")
-
-st.markdown("---")
+        st.warning("Nenhum dado para exibir no gráfico de patrimônio por estado.")
 
 # --- Tabela Detalhada ---
 st.subheader("📑 Dados Detalhados")
 st.dataframe(df_filtrado)
-
+st.set_page_config(page_title="Dashboard - Corretora de Valores", page_icon="💹", layout="wide")
