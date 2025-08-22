@@ -44,4 +44,4 @@ Recomendações para estratégias de marketing
 Projeções e cenários futuros
 
 🌐 Acesse o Dashboard
-🚀 Clique aqui para acessar o Dashboard em tempo real
+<p align="center"> <a href="https://2rmvg3wutgg7nyqvfsvyae.streamlit.app/"> <img src="https://img.shields.io/badge/Acessar%20Dashboard-Streamlit-green?style=for-the-badge&logo=streamlit" alt="Acessar Dashboard"> </a> </p>
