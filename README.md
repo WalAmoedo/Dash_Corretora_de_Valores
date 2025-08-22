@@ -1,6 +1,9 @@
 📊 Dashboard de Análise - Corretora de Valores
+
 📋 Sobre o Projeto
+
 Este projeto consiste em um dashboard interativo desenvolvido para análise de desempenho de uma corretora de valores fictícia e seus clientes. O objetivo principal é fornecer insights estratégicos para reuniões de crescimento e marketing através de visualizações de dados dinâmicas e métricas-chave de performance.
+
 🎯 Objetivos
 
 Análise de Performance: Avaliar o desempenho geral da corretora
