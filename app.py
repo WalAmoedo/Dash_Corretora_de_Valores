@@ -2,16 +2,6 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-# --- Configuração da Página ---
-st.set_page_config(
-    page_title="Dashboard - Corretora de Valores",
-    page_icon="💹",
-    layout="wide",
-)
-
-# --- Carregamento dos dados ---
-df = pd.read_csv("df_limpo.csv", sep=",")
-
 st.markdown("""
     <style>
     /* Fundo das caixinhas do multiselect */
@@ -32,6 +22,16 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# --- Configuração da Página ---
+st.set_page_config(
+    page_title="Dashboard - Corretora de Valores",
+    page_icon="💹",
+    layout="wide",
+)
+
+# --- Carregamento dos dados ---
+df = pd.read_csv("df_limpo.csv", sep=",")
 
 # --- Barra Lateral (Filtros) ---
 st.sidebar.header("🔍 Filtros")
@@ -142,4 +142,5 @@ with col_graf4:
 # --- Tabela Detalhada ---
 st.subheader("📑 Dados Detalhados")
 st.dataframe(df_filtrado)
+
 st.set_page_config(page_title="Dashboard - Corretora de Valores", page_icon="💹", layout="wide")
